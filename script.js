@@ -44,9 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Trigger hero animations after overlay fades
+        // Trigger blessings (first section) animations after overlay fades
         setTimeout(() => {
-            animateHero();
+            animateBlessings();
         }, 600);
     }
 
@@ -85,16 +85,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================
-    // 3. HERO ANIMATIONS (triggered after entrance)
+    // 3. BLESSINGS ANIMATIONS (triggered after entrance)
     // ============================================
-    function animateHero() {
-        const heroContent = document.querySelector('.hero-content');
-        if (!heroContent) return;
+    function animateBlessings() {
+        const blessingsSection = document.querySelector('.blessings');
+        if (!blessingsSection) return;
 
-        // Animate elements inside hero with staggered delays
-        const heroElements = heroContent.querySelectorAll('[data-animate]');
-        heroElements.forEach((el, i) => {
-            const delay = i * 200;
+        // Animate elements inside blessings with staggered delays
+        const blessingsElements = blessingsSection.querySelectorAll('[data-animate]');
+        blessingsElements.forEach((el, i) => {
+            const delay = i * 300;
             setTimeout(() => {
                 triggerAnimation(el);
             }, delay);
@@ -134,9 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
         el.classList.add('animated');
     }
 
-    // Observe all [data-animate] elements except those in hero (hero is manual)
+    // Observe all [data-animate] elements except those in blessings (blessings is manual)
     const animatedElements = document.querySelectorAll('[data-animate]');
-    const heroSection = document.querySelector('.hero');
+    const blessingsSection = document.querySelector('.blessings');
 
     const scrollObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -159,8 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     animatedElements.forEach(el => {
-        // Skip hero elements — they animate on entrance
-        if (heroSection && heroSection.contains(el)) return;
+        // Skip blessings elements — they animate on entrance
+        if (blessingsSection && blessingsSection.contains(el)) return;
         scrollObserver.observe(el);
     });
 
@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================
-    // 7. FLOATING DIYAS (Hero section)
+    // 7. FLOATING DIYAS (Invitation section)
     // ============================================
     const floatingContainer = document.getElementById('floatingElements');
 
@@ -265,16 +265,18 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateCountdown, 1000);
 
     // ============================================
-    // 9. PHOTO SLIDESHOW
+    // 9. PHOTO SLIDESHOW (starts on scroll into view)
     // ============================================
     const slideshowTrack = document.getElementById('slideshowTrack');
     const slideshowDots = document.getElementById('slideshowDots');
+    const gallerySection = document.getElementById('gallery');
 
     if (slideshowTrack && slideshowDots) {
         const slides = slideshowTrack.querySelectorAll('.slide');
         const dots = slideshowDots.querySelectorAll('.dot');
         let currentSlide = 0;
         let slideInterval;
+        let slideshowStarted = false;
 
         function goToSlide(index) {
             slides.forEach(s => s.classList.remove('active'));
@@ -290,21 +292,45 @@ document.addEventListener('DOMContentLoaded', () => {
             goToSlide(next);
         }
 
-        // Auto-advance every 5 seconds
         function startSlideshow() {
+            if (slideInterval) clearInterval(slideInterval);
             slideInterval = setInterval(nextSlide, 5000);
+        }
+
+        function stopSlideshow() {
+            if (slideInterval) {
+                clearInterval(slideInterval);
+                slideInterval = null;
+            }
         }
 
         // Dot click
         dots.forEach(dot => {
             dot.addEventListener('click', () => {
-                clearInterval(slideInterval);
+                stopSlideshow();
                 goToSlide(parseInt(dot.getAttribute('data-index')));
                 startSlideshow();
             });
         });
 
-        startSlideshow();
+        // Only start slideshow when gallery section is in view
+        if (gallerySection) {
+            const galleryObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (!slideshowStarted) {
+                            slideshowStarted = true;
+                            startSlideshow();
+                        }
+                    } else {
+                        stopSlideshow();
+                        slideshowStarted = false;
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            galleryObserver.observe(gallerySection);
+        }
     }
 
     // ============================================
@@ -430,20 +456,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { passive: true });
 
     // ============================================
-    // 12. PARALLAX ON HERO (Desktop only)
+    // 12. PARALLAX ON INVITATION (Desktop only)
     // ============================================
-    const heroContent = document.querySelector('.hero-content');
-    const heroCorners = document.querySelectorAll('.hero-corner');
+    const invitationContent = document.querySelector('.invitation-content');
+    const invitationCorners = document.querySelectorAll('.invitation-corner');
+    const invitationSection = document.querySelector('.invitation');
 
-    if (window.matchMedia('(hover: hover)').matches && heroContent) {
-        document.querySelector('.hero').addEventListener('mousemove', (e) => {
+    if (window.matchMedia('(hover: hover)').matches && invitationContent && invitationSection) {
+        invitationSection.addEventListener('mousemove', (e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width - 0.5;
             const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-            heroContent.style.transform = `translate(${x * 6}px, ${y * 4}px)`;
+            invitationContent.style.transform = `translate(${x * 6}px, ${y * 4}px)`;
 
-            heroCorners.forEach((corner, i) => {
+            invitationCorners.forEach((corner, i) => {
                 const factor = (i + 1) * 2.5;
                 const base = corner.className.includes('top-right') ? 'scaleX(-1)' :
                     corner.className.includes('bottom-left') ? 'scaleY(-1)' :
