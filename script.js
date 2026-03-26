@@ -511,7 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // 5. Copy the deployment URL and replace the URL below
             // =============================================
 
-            const GOOGLE_SCRIPT_URL = ''; // ← Paste your Google Apps Script URL here
+            const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPS9Z7ihb93u9VVKSk9B3xDNpMtFq83DmN3ZUUruqscF7dinxLr0SC_OGgEchxvX9CqQ/exec';
 
             try {
                 if (GOOGLE_SCRIPT_URL) {
