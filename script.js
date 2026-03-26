@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateCountdown, 1000);
 
     // ============================================
-    // 9. PHOTO SLIDESHOW (starts on scroll into view)
+    // 9. PHOTO SLIDESHOW — Enhanced with swipe & cinematic transitions
     // ============================================
     const slideshowTrack = document.getElementById('slideshowTrack');
     const slideshowDots = document.getElementById('slideshowDots');
@@ -273,17 +273,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (slideshowTrack && slideshowDots) {
         const slides = slideshowTrack.querySelectorAll('.slide');
-        const dots = slideshowDots.querySelectorAll('.dot');
         let currentSlide = 0;
         let slideInterval;
         let slideshowStarted = false;
+        const SLIDE_DURATION = 5000;
+
+        function getDots() {
+            return slideshowDots.querySelectorAll('.dot');
+        }
 
         function goToSlide(index) {
-            slides.forEach(s => s.classList.remove('active'));
-            dots.forEach(d => d.classList.remove('active'));
+            // Add exiting class to current slide for smooth out-transition
+            const currentEl = slides[currentSlide];
+            if (currentEl && currentSlide !== index) {
+                currentEl.classList.add('exiting');
+                currentEl.classList.remove('active');
+                setTimeout(() => {
+                    currentEl.classList.remove('exiting');
+                }, 1200);
+            }
 
+            // Reset all dots — use reflow trick to restart CSS animation (no cloning)
+            const allDots = getDots();
+            allDots.forEach(d => {
+                d.classList.remove('active');
+            });
+
+            // Activate new slide
+            slides[index].classList.remove('exiting');
             slides[index].classList.add('active');
-            dots[index].classList.add('active');
+
+            // Force reflow before adding active to restart ::after animation
+            void allDots[index].offsetWidth;
+            allDots[index].classList.add('active');
+
             currentSlide = index;
         }
 
@@ -292,9 +315,14 @@ document.addEventListener('DOMContentLoaded', () => {
             goToSlide(next);
         }
 
+        function prevSlide() {
+            const prev = (currentSlide - 1 + slides.length) % slides.length;
+            goToSlide(prev);
+        }
+
         function startSlideshow() {
             if (slideInterval) clearInterval(slideInterval);
-            slideInterval = setInterval(nextSlide, 5000);
+            slideInterval = setInterval(nextSlide, SLIDE_DURATION);
         }
 
         function stopSlideshow() {
@@ -304,14 +332,88 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Dot click
-        dots.forEach(dot => {
+        // Dot click (use getDots() to always get live DOM references)
+        getDots().forEach(dot => {
             dot.addEventListener('click', () => {
                 stopSlideshow();
                 goToSlide(parseInt(dot.getAttribute('data-index')));
                 startSlideshow();
             });
         });
+
+        // ---- SWIPE GESTURE SUPPORT ----
+        const slideshowFrame = slideshowTrack.closest('.slideshow-frame');
+        if (slideshowFrame) {
+            let touchStartX = 0;
+            let touchStartY = 0;
+            let touchEndX = 0;
+            let isSwiping = false;
+
+            slideshowFrame.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                touchStartY = e.changedTouches[0].screenY;
+                isSwiping = true;
+            }, { passive: true });
+
+            slideshowFrame.addEventListener('touchmove', (e) => {
+                if (!isSwiping) return;
+                touchEndX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            slideshowFrame.addEventListener('touchend', (e) => {
+                if (!isSwiping) return;
+                isSwiping = false;
+                touchEndX = e.changedTouches[0].screenX;
+                const deltaX = touchEndX - touchStartX;
+                const deltaY = Math.abs(e.changedTouches[0].screenY - touchStartY);
+
+                // Only trigger if horizontal swipe is dominant and > 50px
+                if (Math.abs(deltaX) > 50 && Math.abs(deltaX) > deltaY) {
+                    stopSlideshow();
+                    if (deltaX < 0) {
+                        nextSlide(); // Swipe left → next
+                    } else {
+                        prevSlide(); // Swipe right → previous
+                    }
+                    startSlideshow();
+                }
+            }, { passive: true });
+
+            // Mouse drag support (desktop)
+            let mouseStartX = 0;
+            let isDragging = false;
+
+            slideshowFrame.addEventListener('mousedown', (e) => {
+                mouseStartX = e.clientX;
+                isDragging = true;
+                e.preventDefault();
+            });
+
+            slideshowFrame.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                // Optional: could add visual drag feedback here
+            });
+
+            slideshowFrame.addEventListener('mouseup', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                const deltaX = e.clientX - mouseStartX;
+
+                if (Math.abs(deltaX) > 50) {
+                    stopSlideshow();
+                    if (deltaX < 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                    startSlideshow();
+                }
+            });
+
+            slideshowFrame.addEventListener('mouseleave', () => {
+                isDragging = false;
+            });
+        }
 
         // Only start slideshow when gallery section is in view
         if (gallerySection) {

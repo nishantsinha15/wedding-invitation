@@ -33,6 +33,33 @@ body {
     line-height: 1.6;
 }
 
+/* ============================================
+   PAPER TEXTURE OVERLAY (applied to cream sections)
+   ============================================ */
+.paper-texture::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E");
+    background-size: 256px 256px;
+}
+
+/* Warm grain overlay for dark sections */
+.grain-texture::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.12;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23grain)' opacity='0.6'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+}
+
 /* Scroll snap for premium page-turn feel */
 @media (min-width: 768px) {
     html {
@@ -54,17 +81,91 @@ body.entrance-active { overflow: hidden; }
     background: var(--green-deep);
     display: flex; align-items: center; justify-content: center;
     text-align: center; padding: 40px 24px;
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), transform 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Animated gradient orbs background */
 .entrance-overlay::before {
     content: ''; position: absolute; inset: 0;
     background:
-        radial-gradient(ellipse at 30% 30%, rgba(196, 150, 60, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 70% 70%, rgba(196, 150, 60, 0.06) 0%, transparent 50%);
+        radial-gradient(ellipse at 30% 30%, rgba(196, 150, 60, 0.12) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 70%, rgba(196, 150, 60, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(45, 107, 79, 0.1) 0%, transparent 40%);
     pointer-events: none;
+    animation: entranceGradientDrift 8s ease-in-out infinite alternate;
 }
+
+/* Floating gold particles on entrance */
+.entrance-overlay::after {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+        radial-gradient(1.5px 1.5px at 15% 25%, rgba(196, 150, 60, 0.5) 50%, transparent 50%),
+        radial-gradient(1px 1px at 35% 65%, rgba(196, 150, 60, 0.3) 50%, transparent 50%),
+        radial-gradient(2px 2px at 55% 15%, rgba(196, 150, 60, 0.4) 50%, transparent 50%),
+        radial-gradient(1px 1px at 75% 45%, rgba(196, 150, 60, 0.35) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 25% 80%, rgba(196, 150, 60, 0.4) 50%, transparent 50%),
+        radial-gradient(1px 1px at 85% 75%, rgba(196, 150, 60, 0.3) 50%, transparent 50%),
+        radial-gradient(2px 2px at 45% 40%, rgba(196, 150, 60, 0.25) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 65% 85%, rgba(196, 150, 60, 0.45) 50%, transparent 50%),
+        radial-gradient(1px 1px at 10% 55%, rgba(232, 201, 122, 0.3) 50%, transparent 50%),
+        radial-gradient(1.5px 1.5px at 90% 20%, rgba(232, 201, 122, 0.35) 50%, transparent 50%),
+        radial-gradient(1px 1px at 50% 90%, rgba(196, 150, 60, 0.3) 50%, transparent 50%),
+        radial-gradient(2px 2px at 20% 10%, rgba(232, 201, 122, 0.2) 50%, transparent 50%);
+    pointer-events: none;
+    animation: entranceParticleFloat 12s ease-in-out infinite alternate;
+    opacity: 0.7;
+}
+
+@keyframes entranceGradientDrift {
+    0% { 
+        background:
+            radial-gradient(ellipse at 30% 30%, rgba(196, 150, 60, 0.12) 0%, transparent 50%),
+            radial-gradient(ellipse at 70% 70%, rgba(196, 150, 60, 0.08) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(45, 107, 79, 0.1) 0%, transparent 40%);
+    }
+    50% {
+        background:
+            radial-gradient(ellipse at 60% 20%, rgba(196, 150, 60, 0.14) 0%, transparent 50%),
+            radial-gradient(ellipse at 30% 80%, rgba(196, 150, 60, 0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 50%, rgba(45, 107, 79, 0.12) 0%, transparent 40%);
+    }
+    100% {
+        background:
+            radial-gradient(ellipse at 70% 60%, rgba(196, 150, 60, 0.1) 0%, transparent 50%),
+            radial-gradient(ellipse at 20% 40%, rgba(196, 150, 60, 0.12) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 20%, rgba(45, 107, 79, 0.08) 0%, transparent 40%);
+    }
+}
+
+@keyframes entranceParticleFloat {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(-15px) rotate(1deg); }
+}
+
+/* Entrance border glow ring */
+.entrance-border-glow {
+    position: absolute;
+    inset: 30px;
+    border: 1px solid rgba(196, 150, 60, 0.08);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: entranceRingPulse 4s ease-in-out infinite;
+}
+.entrance-border-glow::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border: 1px solid rgba(196, 150, 60, 0.04);
+    border-radius: 50%;
+    animation: entranceRingPulse 4s ease-in-out 1s infinite;
+}
+@keyframes entranceRingPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.02); }
+}
+
 .entrance-overlay.hidden {
-    opacity: 0; transform: scale(1.1);
+    opacity: 0; transform: scale(1.05);
     pointer-events: none;
 }
 
@@ -702,70 +803,137 @@ body.entrance-active { overflow: hidden; }
     max-width: 500px; margin: 0 auto 50px; position: relative; z-index: 1; opacity: 0.9;
 }
 
-.gallery-slideshow { position: relative; z-index: 1; }
-.slideshow-frame {
-    position: relative; display: inline-block; padding: 10px;
+.gallery-slideshow {
+    position: relative; z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 10px;
 }
+.slideshow-frame {
+    position: relative;
+    display: block;
+    padding: 12px;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.slideshow-frame:active { cursor: grabbing; }
 .slideshow-frame::before {
     content: ''; position: absolute; inset: 0;
-    border: 1px solid rgba(196, 150, 60, 0.3); border-radius: 18px;
+    border: 1px solid rgba(196, 150, 60, 0.25); border-radius: 22px;
+    background: linear-gradient(135deg, rgba(196, 150, 60, 0.04), rgba(196, 150, 60, 0.01));
 }
 .slideshow-frame::after {
-    content: none;
+    content: ''; position: absolute; inset: 4px;
+    border: 1px solid rgba(196, 150, 60, 0.1); border-radius: 19px;
+    pointer-events: none;
 }
 
 .slideshow-track {
     position: relative;
-    width: 340px;
-    height: 440px;
+    width: 100%;
+    aspect-ratio: 3 / 4;
     overflow: hidden;
-    border-radius: 14px;
+    border-radius: 16px;
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
+/* Slide transitions — cinematic crossfade with subtle zoom */
 .slide {
     position: absolute; inset: 0;
-    opacity: 0; transform: scale(1.05);
-    transition: opacity 1s ease, transform 6s ease;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: opacity, transform;
 }
 .slide.active {
-    opacity: 1; transform: scale(1);
-    animation: kenBurns 8s ease-in-out infinite alternate;
+    opacity: 1;
+    transform: scale(1);
+    animation: kenBurns 10s ease-in-out infinite alternate;
 }
+/* Slide exiting — slight zoom out */
+.slide.exiting {
+    opacity: 0;
+    transform: scale(0.95);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
 @keyframes kenBurns {
     0% { transform: scale(1) translate(0, 0); }
-    100% { transform: scale(1.08) translate(-1%, -1%); }
+    100% { transform: scale(1.06) translate(-0.5%, -0.5%); }
 }
 
-.slide-placeholder {
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, rgba(196, 150, 60, 0.12) 0%, rgba(45, 107, 79, 0.12) 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
-}
-.slide-initials {
-    font-family: 'Playfair Display', serif; font-size: 2.8rem;
-    color: var(--gold); font-weight: 700;
-}
-.slide-label {
-    font-family: 'DM Sans', sans-serif; font-size: 0.75rem;
-    color: var(--gold-light); opacity: 0.5; letter-spacing: 2px; text-transform: uppercase;
-}
-
-/* When real images are added, use: */
 .slide img {
     width: 100%; height: 100%; object-fit: cover;
+    display: block;
 }
 
+/* Swipe hint indicator */
+.slideshow-swipe-hint {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    animation: swipeHintFade 4s ease 2s forwards;
+    pointer-events: none;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+@keyframes swipeHintFade {
+    0% { opacity: 0; }
+    20% { opacity: 0.7; }
+    80% { opacity: 0.7; }
+    100% { opacity: 0; }
+}
+
+/* Progress bar dots (replacing plain dots) */
 .slideshow-dots {
-    display: flex; justify-content: center; gap: 12px;
-    margin-top: 24px; position: relative; z-index: 2;
+    display: flex; justify-content: center; gap: 8px;
+    margin-top: 28px; position: relative; z-index: 2;
 }
 .dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: rgba(196, 150, 60, 0.3); border: none; cursor: pointer;
-    transition: all 0.3s ease; padding: 0;
+    width: 24px; height: 3px; border-radius: 2px;
+    background: rgba(196, 150, 60, 0.2); border: none; cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 0;
+    position: relative; overflow: hidden;
 }
-.dot.active { background: var(--gold); transform: scale(1.3); }
-.dot:hover { background: var(--gold-light); }
+.dot.active {
+    background: rgba(196, 150, 60, 0.3);
+    width: 40px;
+}
+.dot.active::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    animation: dotProgress 5s linear forwards;
+}
+@keyframes dotProgress {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+.dot:hover { background: rgba(196, 150, 60, 0.4); }
+
+/* Slide counter */
+.slideshow-counter {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    color: var(--gold-light);
+    opacity: 0.4;
+    letter-spacing: 2px;
+    margin-top: 16px;
+    text-align: center;
+}
 
 /* ============================================
    COUNTDOWN
@@ -991,18 +1159,18 @@ body.entrance-active { overflow: hidden; }
     .countdown-number-wrap { min-width: 52px; padding: 8px 4px; }
     .event-card { padding: 32px 22px; }
     .entrance-name { font-size: 2.2rem; }
-    .slideshow-track { width: 260px; height: 340px; }
     .venue-thumb { width: 160px; height: 110px; }
     .ganesha-icon { width: 110px; }
     .family-names { font-size: 0.88rem; line-height: 1.6; }
     .family-label { font-size: 0.58rem; letter-spacing: 1.5px; }
     .family-sub { font-size: 0.65rem; }
     .families-divider { margin: 0 10px; }
+    .gallery-slideshow { max-width: 320px; }
 }
 
 @media (max-width: 480px) {
-    .slideshow-track { width: 300px; height: 400px; }
     .story-illustration { padding: 0 5px; }
+    .gallery-slideshow { max-width: 380px; }
 }
 
 @media (min-width: 768px) {
@@ -1015,7 +1183,7 @@ body.entrance-active { overflow: hidden; }
     .gallery-section { padding: 120px 40px; }
     .countdown-section { padding: 120px 40px; }
     .rsvp-section { padding: 120px 40px; }
-    .slideshow-track { width: 420px; height: 540px; }
+    .gallery-slideshow { max-width: 520px; }
     .story-illustration { max-width: 780px; margin: 24px auto 60px; }
     .story-text { font-size: 1.25rem; line-height: 2.1; }
     .venue { min-height: 100vh; }
@@ -1023,7 +1191,7 @@ body.entrance-active { overflow: hidden; }
 }
 
 @media (min-width: 1024px) {
-    .slideshow-track { width: 480px; height: 600px; }
+    .gallery-slideshow { max-width: 600px; }
     .story-illustration { max-width: 860px; }
 }
 
