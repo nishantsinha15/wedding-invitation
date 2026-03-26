@@ -340,7 +340,7 @@ body.entrance-active { overflow: hidden; }
 }
 .sanskrit-text.secondary-shloka { font-size: 0.9rem; opacity: 0.7; }
 .ganesha-icon {
-    width: 140px; margin: 0 auto 32px;
+    width: 210px; margin: 0 auto 32px;
     filter: drop-shadow(0 4px 12px rgba(196, 150, 60, 0.2));
 }
 .ganesha-icon img { width: 100%; height: auto; display: block; }
@@ -1160,7 +1160,7 @@ body.entrance-active { overflow: hidden; }
     .event-card { padding: 32px 22px; }
     .entrance-name { font-size: 2.2rem; }
     .venue-thumb { width: 160px; height: 110px; }
-    .ganesha-icon { width: 110px; }
+    .ganesha-icon { width: 160px; }
     .family-names { font-size: 0.88rem; line-height: 1.6; }
     .family-label { font-size: 0.58rem; letter-spacing: 1.5px; }
     .family-sub { font-size: 0.65rem; }
@@ -1187,7 +1187,7 @@ body.entrance-active { overflow: hidden; }
     .story-illustration { max-width: 780px; margin: 24px auto 60px; }
     .story-text { font-size: 1.25rem; line-height: 2.1; }
     .venue { min-height: 100vh; }
-    .ganesha-icon { width: 160px; }
+    .ganesha-icon { width: 240px; }
 }
 
 @media (min-width: 1024px) {
