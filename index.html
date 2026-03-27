@@ -9,9 +9,10 @@
     <meta property="og:description" content="Join us for our wedding celebration! May 6-7, 2026 | Guwahati, Assam">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://wedding.nishantsinha.in/">
-    <meta property="og:image" content="https://wedding.nishantsinha.in/images/tldr.png">
+    <meta property="og:image" content="https://wedding.nishantsinha.in/images/og-preview.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/jpeg">
     <link rel="icon" type="image/png" href="images/ganesha.png">
     <link rel="apple-touch-icon" href="images/ganesha.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -291,7 +292,7 @@
                 <div class="event-details">
                     <p class="event-date">Thursday, 7th May 2026</p>
                     <p class="event-venue">Bougainvillea Resort, Guwahati</p>
-                    <p class="event-time">Morning Ceremony</p>
+                    <p class="event-time">10 AM onwards</p>
                 </div>
             </article>
 
@@ -456,7 +457,7 @@
             <div class="ornamental-line gold-line"></div>
         </div>
 
-        <form class="rsvp-form" id="rsvpForm" data-animate="fade-up" data-delay="200">
+        <form class="rsvp-form" id="rsvpForm" data-animate="fade-up" data-delay="200" autocomplete="off">
             <div class="form-group">
                 <label for="guestName" class="form-label">Your Name</label>
                 <input type="text" id="guestName" name="name" class="form-input" placeholder="Full Name" required>
@@ -478,7 +479,7 @@
                 </div>
             </div>
 
-            <div class="form-group" id="guestCountGroup">
+            <div class="form-group" id="guestCountGroup" style="display:none">
                 <label for="guestCount" class="form-label">Number of Guests</label>
                 <select id="guestCount" name="guests" class="form-select">
                     <option value="1">1</option>
@@ -489,7 +490,7 @@
                 </select>
             </div>
 
-            <div class="form-group" id="arrivalGroup">
+            <div class="form-group" id="arrivalGroup" style="display:none">
                 <label for="arrivalDate" class="form-label">Arriving on</label>
                 <select id="arrivalDate" name="arrival" class="form-select">
                     <option value="">Select date</option>
@@ -499,12 +500,12 @@
                 </select>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="messageGroup" style="display:none">
                 <label for="guestMessage" class="form-label">Message for the couple <span class="optional">(optional)</span></label>
                 <textarea id="guestMessage" name="message" class="form-textarea" placeholder="Your wishes..." rows="3"></textarea>
             </div>
 
-            <button type="submit" class="rsvp-submit" id="rsvpSubmit">
+            <button type="submit" class="rsvp-submit" id="rsvpSubmit" style="display:none">
                 <span class="submit-text">Send Your RSVP</span>
                 <span class="submit-loading" style="display:none;">Sending...</span>
             </button>

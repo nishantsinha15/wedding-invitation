@@ -3,6 +3,12 @@
 // Nishant & Sharmistha | May 2026
 // ============================================
 
+// Always start from the top — prevent browser scroll restoration
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+window.scrollTo(0, 0);
+
 document.addEventListener('DOMContentLoaded', () => {
 
     // ============================================
@@ -231,7 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ============================================
     // 8. COUNTDOWN TIMER
     // ============================================
-    const weddingDate = new Date('May 7, 2026 19:00:00 GMT+0530').getTime();
+    const weddingDate = new Date('May 6, 2026 00:00:00 GMT+0530').getTime();
 
     const daysEl = document.getElementById('days');
     const hoursEl = document.getElementById('hours');
@@ -255,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        if (daysEl) daysEl.textContent = String(days).padStart(3, '0');
+        if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
         if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
         if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
         if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
@@ -445,7 +451,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const arrivalGroup = document.getElementById('arrivalGroup');
 
     // Show/hide conditional fields based on attending choice
+    const messageGroup = document.getElementById('messageGroup');
     if (rsvpForm) {
+        // Force-clear any browser-remembered radio state on load
+        rsvpForm.reset();
+
         const attendingRadios = rsvpForm.querySelectorAll('input[name="attending"]');
         attendingRadios.forEach(radio => {
             radio.addEventListener('change', () => {
@@ -455,6 +465,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (arrivalGroup) {
                     arrivalGroup.style.display = isAttending ? 'block' : 'none';
+                }
+                // Always show message + submit after any choice
+                if (messageGroup) {
+                    messageGroup.style.display = 'block';
+                }
+                if (rsvpSubmit) {
+                    rsvpSubmit.style.display = 'block';
                 }
             });
         });

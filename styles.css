@@ -509,9 +509,9 @@ body.entrance-active { overflow: hidden; }
     background: var(--cream); padding: 110px 24px; text-align: center; position: relative;
 }
 .section-title {
-    font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 5vw, 2.5rem);
+    font-family: 'Playfair Display', serif; font-size: clamp(2rem, 6vw, 3.2rem);
     font-weight: 600; color: var(--green-deep); margin-bottom: 14px;
-    position: relative; z-index: 1;
+    letter-spacing: 3px; position: relative; z-index: 1;
 }
 .section-subtitle {
     font-family: 'Cormorant Garamond', serif; font-size: 1.15rem;
