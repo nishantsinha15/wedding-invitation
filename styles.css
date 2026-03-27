@@ -987,7 +987,8 @@ body.entrance-active { overflow: hidden; }
 .countdown-number-wrap {
     background: rgba(196, 150, 60, 0.08);
     border: 1px solid rgba(196, 150, 60, 0.15);
-    border-radius: 14px; padding: 12px 8px; min-width: 68px;
+    border-radius: 14px; padding: 8px 8px 16px; min-width: 68px;
+    display: flex; align-items: center; justify-content: center;
 }
 .countdown-number {
     font-family: 'Playfair Display', serif; font-size: clamp(1.8rem, 7vw, 3rem);
